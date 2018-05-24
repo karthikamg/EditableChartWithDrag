@@ -38,6 +38,7 @@ $(document).ready(function(){
                 var actualX = el.position().left;
                 var x = el.position().left - actualX;
                 var y = el.position().top;
+                // el.attr({'x': x, 'y': y, 'xToPlot': actualX, 'actualX': (Math.ceil(actualX - initialXVal) - 100)});
                 el.attr({'x': x, 'y': y, 'xToPlot': (actualX), 'actualX': Math.ceil(actualX - initialXVal)});
             }
         }
@@ -56,14 +57,14 @@ $(document).ready(function(){
     //     }
     // });
 
-    // for(var i = 30; i < 1440; i = i + 30) {
-    //     if(i % 60 !== 0)
-    //         $('.custom-row #elm_'+i).removeClass('smaller-division').addClass('bigger-division');
-    // }
-    // for(var i = 15; i < 1440; i = i + 15) {
-    //     if(i % 60 !== 0 && i % 30 !== 0)
-    //         $('.custom-row #elm_'+i).removeClass('bigger-division').addClass('smaller-division');
-    // }
+    for(var i = 30; i < 1440; i = i + 30) {
+        if(i % 60 !== 0)
+            $('.custom-row [key="'+i+'"]').removeClass('smaller-sub-division').addClass('bigger-sub-division');
+    }
+    for(var i = 15; i < 1440; i = i + 15) {
+        if(i % 60 !== 0 && i % 30 !== 0)
+            $('.custom-row [key="'+i+'"]').removeClass('bigger-sub-division').addClass('smaller-sub-division');
+    }
     for(var i = 60; i < 1440; i = i + 60) {
         if(i % 60 == 0)
             $('[key="'+i+'"]').addClass('bigger-division');
@@ -83,19 +84,19 @@ $(document).ready(function(){
     //1140 - 1440 -> 3
 
     //x
-    for(var i = 300; i > 0; i = i - 4) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 157px"></div>')};
-    for(var i = 765; i > 300; i = i - 4) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 107px"></div>')};
-    for(var i = 810; i > 765; i = i - 4) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 157px"></div>')};
-    for(var i = 1020; i > 810; i = i - 4) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 57px"></div>')};
-    for(var i = 1140; i > 1020; i = i - 4) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 107px"></div>')};
-    for(var i = 1440; i > 1140; i = i - 4) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 157px"></div>')};
+    for(var i = 300; i > 0; i--) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 157px"></div>')};
+    for(var i = 765; i > 300; i--) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 107px"></div>')};
+    for(var i = 810; i > 765; i--) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 157px"></div>')};
+    for(var i = 1020; i > 810; i--) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 57px"></div>')};
+    for(var i = 1140; i > 1020; i--) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 107px"></div>')};
+    for(var i = 1440; i > 1140; i--) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 157px"></div>')};
 
     //y
-    for(var i = 155; i > 105; i = i - 4) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="300"]').attr('xToPlot')) + 2)+'px"></div>')};
-    for(var i = 155; i > 105; i = i - 4) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="765"]').attr('xToPlot')) + 2)+'px"></div>')};
-    for(var i = 155; i > 55; i = i - 4) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="810"]').attr('xToPlot')) + 2)+'px"></div>')};
-    for(var i = 105; i > 55; i = i - 4) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="1020"]').attr('xToPlot')) + 2)+'px"></div>')};
-    for(var i = 155; i > 105; i = i - 4) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="1140"]').attr('xToPlot')) + 2)+'px"></div>')};
+    for(var i = 155; i > 105; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="300"]').attr('xToPlot')) + 2)+'px"></div>')};
+    for(var i = 155; i > 105; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="765"]').attr('xToPlot')) + 2)+'px"></div>')};
+    for(var i = 155; i > 55; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="810"]').attr('xToPlot')) + 2)+'px"></div>')};
+    for(var i = 105; i > 55; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="1020"]').attr('xToPlot')) + 2)+'px"></div>')};
+    for(var i = 155; i > 105; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="1140"]').attr('xToPlot')) + 2)+'px"></div>')};
     return output;
   },
   enumerateBoard: function(board) {
@@ -106,58 +107,71 @@ gameBoard.createBoard(10, "#editable-chart");
        var coordinates = {},
             j = 1,
             template = '';
-      function dragFunc(elements) {
-          $('#left-drag, #right-drag').draggable({
+        function dragFunc(elements) {
+          $('.drag-elem').draggable({
               axis: "x",
               containment: "#editable-chart",
-              create: function(event, ui){
-                  for (var k in elements){
-                      coordinates[k] = {
-                          x: $(elements[k]).position().left,
-                          y: $(elements[k]).position().top,
-                          x1: $(elements[k]).position().left + $(elements[k])[0].clientWidth,
-                          y1: $(elements[k]).position().top + $(elements[k])[0].clientHeight
-                      }
-                  }
-              },
+              create: function(event, ui){},
               drag: function(event, ui){
-                  var draggableElementCoord = {
-                      x: ui.position.left,
-                      y: ui.position.top,
-                      x1: ui.position.left + ui.helper[0].clientWidth,
-                      y1: ui.position.top + ui.helper[0].clientHeight
-                  };
-                  var distanceBetDrag = $('#right-drag').position().left - $('#left-drag').position().left;
-                  var fromID = $('[key="'+$('#left-drag').position().left+'"]');
-                  var toID = $('[key="'+$('#right-drag').position().left+'"]');
+                  var toDragPos = $('#right-drag').position().left;
+                  var fromDragPos = $('#left-drag').position().left;
+                  var distanceBetDrag = toDragPos - fromDragPos;
+                  var fromID = $('[key="'+fromDragPos+'"]');
+                  var toID = $('[key="'+toDragPos+'"]');
                   if(fromID && toID) {
                       // var selectedToTime = $('[key="'+$('#right-drag').position().left+'"]');
                       // var selectedFromTime = $('[key="'+$('#left-drag').position().left+'"]');
-                      var selectedToTime = $('[actualx="'+Math.ceil($('#right-drag').position().left)+'"]').attr('key');
-                      var selectedFromTime = $('[actualx="'+Math.ceil($('#left-drag').position().left)+'"]').attr('key');
-                      var Tohours = Math.floor( selectedToTime / 60);
-                      var Fromhours = Math.floor( selectedFromTime / 60);
-                      var Tominutes = selectedToTime % 60;
-                      var Fromminutes = selectedFromTime % 60;
-                      var Toampm = Tominutes < 720 ? 'am' : 'pm';
-                      var Fromampm = Fromminutes < 720 ? 'am' : 'pm';
-                      $('#selected-from-time').val(Tohours + ':' + Tominutes + ' ' + Toampm);
-                      $('#selected-to-time').val(Fromhours + ':' + Fromminutes + ' ' + Fromampm);
+                      var selectedToTime = $('[actualx="'+Math.ceil(toDragPos)+'"]').attr('key');
+                      var selectedFromTime = $('[actualx="'+Math.ceil(fromDragPos)+'"]').attr('key');
+                      if(selectedToTime && selectedFromTime) {
+                          var Tohours = Math.floor( selectedToTime / 60);
+                          var TohoursToDisplay = Tohours % 12;
+                          TohoursToDisplay = TohoursToDisplay ? TohoursToDisplay : 12; // the hour '0' should be '12'
+                          var Fromhours = Math.floor( selectedFromTime / 60);
+                          var FromhoursToDisplay = Fromhours % 12;
+                          FromhoursToDisplay = FromhoursToDisplay ? FromhoursToDisplay : 12; // the hour '0' should be '12'
+                          var Tominutes = selectedToTime % 60;
+                          Tominutes = Tominutes < 10 ? '0'+Tominutes : Tominutes;
+                          var Fromminutes = selectedFromTime % 60;
+                          Fromminutes = Fromminutes < 10 ? '0'+Fromminutes : Fromminutes;
+                          var Toampm = Tohours >= 12 ? 'pm' : 'am';
+                          var Fromampm = Fromhours >= 12 ? 'pm' : 'am';
+
+                          $('#selected-from-time').val(TohoursToDisplay + ':' + Tominutes + ' ' + Toampm);
+                          $('#selected-to-time').val(FromhoursToDisplay + ':' + Fromminutes + ' ' + Fromampm);
+
+                          $('.left-bubble').text(FromhoursToDisplay + ':' + Fromminutes + ' ' + Fromampm);
+                          $('.right-bubble').text(TohoursToDisplay + ':' + Tominutes + ' ' + Toampm);
+                      }
                   }
-                  if($(ui)[0].helper.attr('id') == 'right-drag')
+                  if($(ui)[0].helper.attr('id') == 'right-drag') {
                     $('#draggable-area').css({'width': distanceBetDrag});
-                  else
+                    $('.right-bubble').css('left', (parseInt($('#right-drag').position().left) - 30));
+                  }
+                  else {
                       $('#draggable-area').css({'left': ($('#left-drag').position().left), 'width': distanceBetDrag});
+                      $('.left-bubble').css('left', (parseInt($('#left-drag').position().left) - 30));
+                  }
               }
           });
       }
-      dragFunc(['#editable-chart'])
+      dragFunc(['#editable-chart']);
+      $(window).on('resize', function(){
+          var toDragPos = $('#right-drag').position().left;
+          var fromDragPos = $('#left-drag').position().left;
+          var distanceBetDrag = toDragPos - fromDragPos;
+          $('#draggable-area').css({'left': ($('#left-drag').position().left), 'width': distanceBetDrag});
+          $('.right-bubble').css('left', (parseInt(toDragPos) - 30));
+          $('.left-bubble').css('left', (parseInt(fromDragPos) - 30));
+      });
 
       $('#left-drag, #right-drag').height($('#editable-chart').height());
       $('#left-drag').css('left', '140px');
       $('#right-drag').css('left', '300px');
       var distanceBetDrag = $('#right-drag').position().left - $('#left-drag').position().left;
       $('#draggable-area').css({'left': ($('#left-drag').position().left), 'width': distanceBetDrag});
+      $('.left-bubble').css('left', ($('#left-drag').position().left));
+      $('.right-bubble').css('left', ($('#right-drag').position().left));
 
       // This timeout, started on mousedown, triggers the beginning of a hold
       var holdStarter = null;

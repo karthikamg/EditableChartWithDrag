@@ -3,16 +3,19 @@
     <head>
         <meta charset="utf-8">
         <script src="./jquery.min.js"></script>
+        <script src="./jquery-ui.js"></script>
         <script src="./script.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
         <link rel="stylesheet" href="./main.css">
         <title></title>
     </head>
     <body>
         <div id="editable-chart">
-            <div id="left-drag"></div>
+            <div class="left-bubble"></div>
+            <div id="left-drag" class="drag-elem"></div>
             <div id="draggable-area"></div>
-            <div id="right-drag"></div>
+            <div class="right-bubble"></div>
+            <div id="right-drag" class="drag-elem"></div>
+            <div id="drag-line"></div>
         </div>
         <div style="margin-top: 15px">
             <span>From time in minutes: </span><input id="selected-to-time" type="text" name="" value="">
