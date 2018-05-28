@@ -83,20 +83,118 @@ $(document).ready(function(){
     //1020 - 1140 -> 0
     //1140 - 1440 -> 3
 
+    //generating json file
+    var jsonArr = [];
+    for(var j = 0; j < 150; j++) {
+        var jsonObj = {};
+        jsonObj["driverState"] = "OFF_DUTY",
+        jsonObj["minutesFrom"] = 0,
+        jsonObj["minutesTo"] = j,
+        jsonObj["location"] = "",
+        jsonObj["note"] = "",
+        jsonObj["entryId"] = 0
+        jsonArr.push(jsonObj);
+    }
+    for(var j = 150; j < 960; j++) {
+        var jsonObj = {};
+        jsonObj["driverState"] = "ON_DUTY",
+        jsonObj["minutesFrom"] = 150,
+        jsonObj["minutesTo"] = j,
+        jsonObj["location"] = "",
+        jsonObj["note"] = "",
+        jsonObj["entryId"] =  1
+        jsonArr.push(jsonObj);
+    }
+    for(var j = 960; j < 1024; j++) {
+        var jsonObj = {};
+        jsonObj["driverState"] ="OFF_DUTY",
+        jsonObj["minutesFrom"] = 960,
+        jsonObj["minutesTo"] = j,
+        jsonObj["location"] = "",
+        jsonObj["note"] = "",
+        jsonObj["entryId"] = 2
+        jsonArr.push(jsonObj);
+    }
+    for(var j = 1024; j < 1200; j++) {
+        var jsonObj = {};
+        jsonObj["driverState"] ="SLEEPING",
+        jsonObj["minutesFrom"] = 1024,
+        jsonObj["minutesTo"] = j,
+        jsonObj["location"] = "",
+        jsonObj["note"] = "",
+        jsonObj["entryId"] = 3
+        jsonArr.push(jsonObj);
+    }
+    for(var j = 1200; j < 1300; j++) {
+        var jsonObj = {};
+        jsonObj["driverState"] ="ON_DUTY",
+        jsonObj["minutesFrom"] = 1200,
+        jsonObj["minutesTo"] = j,
+        jsonObj["location"] = "",
+        jsonObj["note"] = "",
+        jsonObj["entryId"] = 4
+        jsonArr.push(jsonObj);
+    }
+    for(var j = 1300; j < 1440; j++) {
+        var jsonObj = {};
+        jsonObj["driverState"] ="OFF_DUTY",
+        jsonObj["minutesFrom"] = 1300,
+        jsonObj["minutesTo"] = j,
+        jsonObj["location"] = "",
+        jsonObj["note"] = "",
+        jsonObj["entryId"] = 5
+        jsonArr.push(jsonObj);
+    }
+
+    var driverState = ['ON_DUTY', 'DRIVING', 'OFF_DUTY', 'SLEEPING'];
+    var driverStatusPoint = {0: 158, 1: 123, 2: 54, 3: 88 };
+    var previousState = '', previousFrom = '';
+    $.each(jsonArr, function(key, value){
+        var statusIndex = $.inArray(value.driverState, driverState);
+        $('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+(value.minutesTo)+'"]').attr('xToPlot'))+'px;top: '+driverStatusPoint[statusIndex]+'px"></div>')
+        if(previousState.length == 0) {
+            previousState = value.driverState;
+            previousFrom = value.minutesFrom;
+        }
+        else {
+            if(previousState !== value.driverState) {
+                $('.table').append('<div class="driverStateSelector"><div>'+previousFrom+' - '+value.minutesTo+'</div><div>'+previousState+'</div></div>');
+                $('.table .driverStateSelector:last-child').attr({'data-right':($('.elm[key="'+(value.minutesTo)+'"]').attr('xToPlot')),
+                'data-left': (previousFrom == 0 ? 24 : ($('.elm[key="'+(previousFrom)+'"]').attr('xToPlot')))});
+                var toLimit = driverStatusPoint[$.inArray(previousState, driverState)],
+                    fromLimit = driverStatusPoint[statusIndex];
+                if(toLimit < fromLimit) {
+                    for(var i = fromLimit; i > toLimit; i--) {
+                        $('#editable-chart').append('<div class="pointY" style="top:'+(i - 1)+'px;left: '+(parseInt($('[key="'+(value.minutesTo)+'"]').attr('xToPlot')) + 2)+'px"></div>')
+                    }
+                } else {
+                    for(var i = toLimit; i > fromLimit; i--) {
+                        $('#editable-chart').append('<div class="pointY" style="top:'+(i - 1)+'px;left: '+(parseInt($('[key="'+(value.minutesTo)+'"]').attr('xToPlot')) + 2)+'px"></div>')
+                    }
+                }
+                previousState = value.driverState;
+                previousFrom = value.minutesFrom;
+            }
+        }
+    });
+    $('.table').append('<div class="driverStateSelector"><div>'+jsonArr[jsonArr.length-1]['minutesFrom']+' - '+jsonArr[jsonArr.length-1]['minutesTo']+'</div><div>'+jsonArr[jsonArr.length-1]['driverState']+'</div></div>');
+    $('.table .driverStateSelector:last-child').attr({'data-right':($('.elm[key="'+(jsonArr[jsonArr.length-1]['minutesTo'])+'"]').attr('xToPlot')),
+    'data-left': (previousFrom == 0 ? 24 : ($('.elm[key="'+(previousFrom)+'"]').attr('xToPlot')))});
+
     //x
-    for(var i = 300; i > 0; i--) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 157px"></div>')};
-    for(var i = 765; i > 300; i--) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 107px"></div>')};
-    for(var i = 810; i > 765; i--) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 157px"></div>')};
-    for(var i = 1020; i > 810; i--) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 57px"></div>')};
-    for(var i = 1140; i > 1020; i--) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 107px"></div>')};
-    for(var i = 1440; i > 1140; i--) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 157px"></div>')};
+    // for(var i = 300; i > 0; i--) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 157px"></div>')};
+    // for(var i = 765; i > 300; i--) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 107px"></div>')};
+    // for(var i = 810; i > 765; i--) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 157px"></div>')};
+    // for(var i = 1020; i > 810; i--) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 57px"></div>')};
+    // for(var i = 1140; i > 1020; i--) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 107px"></div>')};
+    // for(var i = 1440; i > 1140; i--) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 157px"></div>')};
 
     //y
-    for(var i = 155; i > 105; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="300"]').attr('xToPlot')) + 2)+'px"></div>')};
-    for(var i = 155; i > 105; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="765"]').attr('xToPlot')) + 2)+'px"></div>')};
-    for(var i = 155; i > 55; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="810"]').attr('xToPlot')) + 2)+'px"></div>')};
-    for(var i = 105; i > 55; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="1020"]').attr('xToPlot')) + 2)+'px"></div>')};
-    for(var i = 155; i > 105; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="1140"]').attr('xToPlot')) + 2)+'px"></div>')};
+    // for(var i = 158; i > 54; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="300"]').attr('xToPlot')) + 2)+'px"></div>')};
+    // for(var i = 155; i > 105; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="765"]').attr('xToPlot')) + 2)+'px"></div>')};
+    // for(var i = 155; i > 55; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="810"]').attr('xToPlot')) + 2)+'px"></div>')};
+    // for(var i = 105; i > 55; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="1020"]').attr('xToPlot')) + 2)+'px"></div>')};
+    // for(var i = 155; i > 105; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="1140"]').attr('xToPlot')) + 2)+'px"></div>')};
     return output;
   },
   enumerateBoard: function(board) {
@@ -113,37 +211,8 @@ gameBoard.createBoard(10, "#editable-chart");
               containment: "#editable-chart",
               create: function(event, ui){},
               drag: function(event, ui){
-                  var toDragPos = $('#right-drag').position().left;
-                  var fromDragPos = $('#left-drag').position().left;
-                  var distanceBetDrag = toDragPos - fromDragPos;
-                  var fromID = $('[key="'+fromDragPos+'"]');
-                  var toID = $('[key="'+toDragPos+'"]');
-                  if(fromID && toID) {
-                      // var selectedToTime = $('[key="'+$('#right-drag').position().left+'"]');
-                      // var selectedFromTime = $('[key="'+$('#left-drag').position().left+'"]');
-                      var selectedToTime = $('[actualx="'+Math.ceil(toDragPos)+'"]').attr('key');
-                      var selectedFromTime = $('[actualx="'+Math.ceil(fromDragPos)+'"]').attr('key');
-                      if(selectedToTime && selectedFromTime) {
-                          var Tohours = Math.floor( selectedToTime / 60);
-                          var TohoursToDisplay = Tohours % 12;
-                          TohoursToDisplay = TohoursToDisplay ? TohoursToDisplay : 12; // the hour '0' should be '12'
-                          var Fromhours = Math.floor( selectedFromTime / 60);
-                          var FromhoursToDisplay = Fromhours % 12;
-                          FromhoursToDisplay = FromhoursToDisplay ? FromhoursToDisplay : 12; // the hour '0' should be '12'
-                          var Tominutes = selectedToTime % 60;
-                          Tominutes = Tominutes < 10 ? '0'+Tominutes : Tominutes;
-                          var Fromminutes = selectedFromTime % 60;
-                          Fromminutes = Fromminutes < 10 ? '0'+Fromminutes : Fromminutes;
-                          var Toampm = Tohours >= 12 ? 'pm' : 'am';
-                          var Fromampm = Fromhours >= 12 ? 'pm' : 'am';
-
-                          $('#selected-from-time').val(TohoursToDisplay + ':' + Tominutes + ' ' + Toampm);
-                          $('#selected-to-time').val(FromhoursToDisplay + ':' + Fromminutes + ' ' + Fromampm);
-
-                          $('.left-bubble').text(FromhoursToDisplay + ':' + Fromminutes + ' ' + Fromampm);
-                          $('.right-bubble').text(TohoursToDisplay + ':' + Tominutes + ' ' + Toampm);
-                      }
-                  }
+                  timeCalc();
+                  var distanceBetDrag = $('#right-drag').position().left - $('#left-drag').position().left;
                   if($(ui)[0].helper.attr('id') == 'right-drag') {
                     $('#draggable-area').css({'width': distanceBetDrag});
                     $('.right-bubble').css('left', (parseInt($('#right-drag').position().left) - 30));
@@ -164,14 +233,18 @@ gameBoard.createBoard(10, "#editable-chart");
           $('.right-bubble').css('left', (parseInt(toDragPos) - 30));
           $('.left-bubble').css('left', (parseInt(fromDragPos) - 30));
       });
-
       $('#left-drag, #right-drag').height($('#editable-chart').height());
-      $('#left-drag').css('left', '140px');
-      $('#right-drag').css('left', '300px');
-      var distanceBetDrag = $('#right-drag').position().left - $('#left-drag').position().left;
-      $('#draggable-area').css({'left': ($('#left-drag').position().left), 'width': distanceBetDrag});
-      $('.left-bubble').css('left', ($('#left-drag').position().left));
-      $('.right-bubble').css('left', ($('#right-drag').position().left));
+
+      $(document).on('click', '.driverStateSelector', function(){
+          $('#left-drag').css('left', $(this).attr('data-left')+'px').show();
+          $('#right-drag').css('left', $(this).attr('data-right')+'px').show();
+          var distanceBetDrag = $('#right-drag').position().left - $('#left-drag').position().left;
+          $('#draggable-area').css({'left': ($('#left-drag').position().left), 'width': distanceBetDrag});
+          $('.left-bubble').css('left', $(this).attr('data-left')+'px').show();
+          $('.right-bubble').css('left', $(this).attr('data-right')+'px').show();
+          timeCalc();
+          $(window).trigger('resize');
+      });
 
       // This timeout, started on mousedown, triggers the beginning of a hold
       var holdStarter = null;
@@ -184,6 +257,33 @@ gameBoard.createBoard(10, "#editable-chart");
 
       // MouseDown
       $('#left-drag, #right-drag').mousedown(onMouseDown);
+      function timeCalc() {
+          var toDragPos = $('#right-drag').position().left;
+          var fromDragPos = $('#left-drag').position().left;
+          var distanceBetDrag = toDragPos - fromDragPos;
+          var selectedToTime = $('[actualx="'+Math.ceil(toDragPos)+'"]').attr('key');
+          var selectedFromTime = $('[actualx="'+Math.ceil(fromDragPos == 24 ? 27 : fromDragPos)+'"]').attr('key');
+          if(selectedToTime && selectedFromTime) {
+              var Tohours = Math.floor( selectedToTime / 60);
+              var TohoursToDisplay = Tohours % 12;
+              TohoursToDisplay = TohoursToDisplay ? TohoursToDisplay : 12; // the hour '0' should be '12'
+              var Fromhours = Math.floor( selectedFromTime / 60);
+              var FromhoursToDisplay = Fromhours % 12;
+              FromhoursToDisplay = FromhoursToDisplay ? FromhoursToDisplay : 12; // the hour '0' should be '12'
+              var Tominutes = selectedToTime % 60;
+              Tominutes = Tominutes < 10 ? '0'+Tominutes : Tominutes;
+              var Fromminutes = selectedFromTime % 60;
+              Fromminutes = Fromminutes < 10 ? '0'+Fromminutes : Fromminutes;
+              var Toampm = Tohours >= 12 ? 'pm' : 'am';
+              var Fromampm = Fromhours >= 12 ? 'pm' : 'am';
+
+              $('#selected-from-time').val(TohoursToDisplay + ':' + Tominutes + ' ' + Toampm);
+              $('#selected-to-time').val(FromhoursToDisplay + ':' + Fromminutes + ' ' + Fromampm);
+
+              $('.left-bubble').text(FromhoursToDisplay + ':' + Fromminutes + ' ' + Fromampm);
+              $('.right-bubble').text(TohoursToDisplay + ':' + Tominutes + ' ' + Toampm);
+          }
+      }
       function onMouseDown(){
         holdStarter = setTimeout(function() {
             // If the mouse is released immediately (i.e., a click), before the
