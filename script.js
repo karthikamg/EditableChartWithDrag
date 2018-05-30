@@ -216,14 +216,12 @@ gameBoard.createBoard(10, "#editable-chart");
                   timeCalc();
                   var distanceBetDrag = $('#right-drag').position().left - $('#left-drag').position().left;
                   if($(ui)[0].helper.attr('id') == 'right-drag') {
-                    $('#draggable-area').css({'width': distanceBetDrag});
+                    $('#draggable-area').css({'width': (distanceBetDrag + 3)});
                     $('.right-bubble').css('left', (parseInt($('#right-drag').position().left) - 30));
-                    // $('#editable-chart').append('<div class="point" style="left:'+(parseInt($('#right-drag').position().left))+'px;top: 54px"></div>');
                   }
                   else {
                       $('#draggable-area').css({'left': ($('#left-drag').position().left), 'width': distanceBetDrag});
                       $('.left-bubble').css('left', (parseInt($('#left-drag').position().left) - 30));
-                      // $('#editable-chart').append('<div class="point" style="left:'+(parseInt($('#left-drag').position().left))+'px;top: 54px"></div>');
                   }
               },
               stop: function() {
