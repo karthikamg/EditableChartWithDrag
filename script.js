@@ -1,4 +1,7 @@
 $(document).ready(function(){
+    var selectedType = '';
+    var driverState = ['ON_DUTY', 'DRIVING', 'OFF_DUTY', 'SLEEPING'];
+    var driverStatusPoint = {0: 158, 1: 123, 2: 54, 3: 88 };
     var gameBoard = {
   createBoard: function(dimension, mount) {
     var mount = document.querySelector(mount);
@@ -146,19 +149,17 @@ $(document).ready(function(){
         jsonArr.push(jsonObj);
     }
 
-    var driverState = ['ON_DUTY', 'DRIVING', 'OFF_DUTY', 'SLEEPING'];
-    var driverStatusPoint = {0: 158, 1: 123, 2: 54, 3: 88 };
     var previousState = '', previousFrom = '';
     $.each(jsonArr, function(key, value){
         var statusIndex = $.inArray(value.driverState, driverState);
-        $('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+(value.minutesTo)+'"]').attr('xToPlot'))+'px;top: '+driverStatusPoint[statusIndex]+'px"></div>')
+        $('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+(value.minutesTo)+'"]').attr('xToPlot'))+'px;top: '+driverStatusPoint[statusIndex]+'px"></div>');
         if(previousState.length == 0) {
             previousState = value.driverState;
             previousFrom = value.minutesFrom;
         }
         else {
             if(previousState !== value.driverState) {
-                $('.table').append('<div class="driverStateSelector"><div>'+previousFrom+' - '+value.minutesTo+'</div><div>'+previousState+'</div></div>');
+                $('.table').append('<div class="driverStateSelector">'+previousState+'</div>');
                 $('.table .driverStateSelector:last-child').attr({'data-right':($('.elm[key="'+(value.minutesTo)+'"]').attr('xToPlot')),
                 'data-left': (previousFrom == 0 ? 24 : ($('.elm[key="'+(previousFrom)+'"]').attr('xToPlot')))});
                 var toLimit = driverStatusPoint[$.inArray(previousState, driverState)],
@@ -208,6 +209,7 @@ gameBoard.createBoard(10, "#editable-chart");
         function dragFunc(elements) {
           $('.drag-elem').draggable({
               axis: "x",
+              delay: 0,
               containment: "#editable-chart",
               create: function(event, ui){},
               drag: function(event, ui){
@@ -216,11 +218,23 @@ gameBoard.createBoard(10, "#editable-chart");
                   if($(ui)[0].helper.attr('id') == 'right-drag') {
                     $('#draggable-area').css({'width': distanceBetDrag});
                     $('.right-bubble').css('left', (parseInt($('#right-drag').position().left) - 30));
+                    // $('#editable-chart').append('<div class="point" style="left:'+(parseInt($('#right-drag').position().left))+'px;top: 54px"></div>');
                   }
                   else {
                       $('#draggable-area').css({'left': ($('#left-drag').position().left), 'width': distanceBetDrag});
                       $('.left-bubble').css('left', (parseInt($('#left-drag').position().left) - 30));
+                      // $('#editable-chart').append('<div class="point" style="left:'+(parseInt($('#left-drag').position().left))+'px;top: 54px"></div>');
                   }
+              },
+              stop: function() {
+                  $('.newChartDraw').hide();
+                  var statusIndex = $.inArray(selectedType, driverState);
+                  var toDragPos = $('#right-drag').position().left;
+                  var fromDragPos = $('#left-drag').position().left;
+                  for(var i = fromDragPos; i < toDragPos; i++) {
+                      $('#editable-chart').append('<div class="point newChartDraw" style="left:'+i+'px;top: '+driverStatusPoint[statusIndex]+'px"></div>');
+                  }
+                  $(window).trigger('resize');
               }
           });
       }
@@ -236,12 +250,12 @@ gameBoard.createBoard(10, "#editable-chart");
       $('#left-drag, #right-drag').height($('#editable-chart').height());
 
       $(document).on('click', '.driverStateSelector', function(){
-          $('#left-drag').css('left', $(this).attr('data-left')+'px').show();
-          $('#right-drag').css('left', $(this).attr('data-right')+'px').show();
+          $('.driverStateSelector').addClass('disabled-edit');
+          selectedType = $(this).text();
+          $('#left-drag, .left-bubble').css('left', $(this).attr('data-left')+'px').show();
+          $('#right-drag, .right-bubble').css('left', $(this).attr('data-right')+'px').show();
           var distanceBetDrag = $('#right-drag').position().left - $('#left-drag').position().left;
           $('#draggable-area').css({'left': ($('#left-drag').position().left), 'width': distanceBetDrag});
-          $('.left-bubble').css('left', $(this).attr('data-left')+'px').show();
-          $('.right-bubble').css('left', $(this).attr('data-right')+'px').show();
           timeCalc();
           $(window).trigger('resize');
       });

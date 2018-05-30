@@ -340,6 +340,13 @@ tr td:first-child {
     margin-top: 37px;
     cursor: pointer;
 }
+.newChartDraw {
+    background-color: #934e13;
+}
+.disabled-edit {
+    cursor: no-drop;
+    pointer-events: none;
+}
 
 
 /*media query*/
