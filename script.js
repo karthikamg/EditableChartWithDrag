@@ -6,10 +6,10 @@ $(document).ready(function(){
   createBoard: function(dimension, mount) {
     var mount = document.querySelector(mount);
     var initialXVal = 0;
-    if (!dimension || isNaN(dimension) || !parseInt(dimension, 10)) {
+    if (!dimension || isNaN(dimension) || !parseFloat(dimension, 10)) {
       return false;
     } else {
-      dimension = typeof dimension === 'string' ? parseInt(dimension, 10) : dimension;
+      dimension = typeof dimension === 'string' ? parseFloat(dimension, 10) : dimension;
       var idenNum = 1;
       $('#editable-chart').append('<div class="table"></div>');
       for(var k = 1; k < 5; k++) {
@@ -166,11 +166,11 @@ $(document).ready(function(){
                     fromLimit = driverStatusPoint[statusIndex];
                 if(toLimit < fromLimit) {
                     for(var i = fromLimit; i > toLimit; i--) {
-                        $('#editable-chart').append('<div class="pointY" style="top:'+(i - 1)+'px;left: '+(parseInt($('[key="'+(value.minutesTo)+'"]').attr('xToPlot')) + 2)+'px"></div>')
+                        $('#editable-chart').append('<div class="pointY" style="top:'+(i - 1)+'px;left: '+(parseFloat($('[key="'+(value.minutesTo)+'"]').attr('xToPlot')) + 2)+'px"></div>')
                     }
                 } else {
                     for(var i = toLimit; i > fromLimit; i--) {
-                        $('#editable-chart').append('<div class="pointY" style="top:'+(i - 1)+'px;left: '+(parseInt($('[key="'+(value.minutesTo)+'"]').attr('xToPlot')) + 2)+'px"></div>')
+                        $('#editable-chart').append('<div class="pointY" style="top:'+(i - 1)+'px;left: '+(parseFloat($('[key="'+(value.minutesTo)+'"]').attr('xToPlot')) + 2)+'px"></div>')
                     }
                 }
                 previousState = value.driverState;
@@ -191,11 +191,11 @@ $(document).ready(function(){
     // for(var i = 1440; i > 1140; i--) {$('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+i+'"]').attr('xToPlot'))+'px;top: 157px"></div>')};
 
     //y
-    // for(var i = 158; i > 54; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="300"]').attr('xToPlot')) + 2)+'px"></div>')};
-    // for(var i = 155; i > 105; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="765"]').attr('xToPlot')) + 2)+'px"></div>')};
-    // for(var i = 155; i > 55; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="810"]').attr('xToPlot')) + 2)+'px"></div>')};
-    // for(var i = 105; i > 55; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="1020"]').attr('xToPlot')) + 2)+'px"></div>')};
-    // for(var i = 155; i > 105; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseInt($('[key="1140"]').attr('xToPlot')) + 2)+'px"></div>')};
+    // for(var i = 158; i > 54; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseFloat($('[key="300"]').attr('xToPlot')) + 2)+'px"></div>')};
+    // for(var i = 155; i > 105; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseFloat($('[key="765"]').attr('xToPlot')) + 2)+'px"></div>')};
+    // for(var i = 155; i > 55; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseFloat($('[key="810"]').attr('xToPlot')) + 2)+'px"></div>')};
+    // for(var i = 105; i > 55; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseFloat($('[key="1020"]').attr('xToPlot')) + 2)+'px"></div>')};
+    // for(var i = 155; i > 105; i--) {$('#editable-chart').append('<div class="pointY" style="top:'+i+'px;left: '+(parseFloat($('[key="1140"]').attr('xToPlot')) + 2)+'px"></div>')};
     return output;
   },
   enumerateBoard: function(board) {
@@ -217,11 +217,11 @@ gameBoard.createBoard(10, "#editable-chart");
                   var distanceBetDrag = $('#right-drag').position().left - $('#left-drag').position().left;
                   if($(ui)[0].helper.attr('id') == 'right-drag') {
                     $('#draggable-area').css({'width': (distanceBetDrag + 3)});
-                    $('.right-bubble').css('left', (parseInt($('#right-drag').position().left) - 30));
+                    $('.right-bubble').css('left', (parseFloat($('#right-drag').position().left) - 30));
                   }
                   else {
                       $('#draggable-area').css({'left': ($('#left-drag').position().left), 'width': distanceBetDrag});
-                      $('.left-bubble').css('left', (parseInt($('#left-drag').position().left) - 30));
+                      $('.left-bubble').css('left', (parseFloat($('#left-drag').position().left) - 30));
                   }
               },
               stop: function() {
@@ -242,16 +242,20 @@ gameBoard.createBoard(10, "#editable-chart");
           var fromDragPos = $('#left-drag').position().left;
           var distanceBetDrag = toDragPos - fromDragPos;
           $('#draggable-area').css({'left': ($('#left-drag').position().left), 'width': distanceBetDrag});
-          $('.right-bubble').css('left', (parseInt(toDragPos) - 30));
-          $('.left-bubble').css('left', (parseInt(fromDragPos) - 30));
+          $('.right-bubble').css('left', (parseFloat(toDragPos) - 30));
+          $('.left-bubble').css('left', (parseFloat(fromDragPos) - 30));
       });
       $('#left-drag, #right-drag').height($('#editable-chart').height());
 
       $(document).on('click', '.driverStateSelector', function(){
           $('.driverStateSelector').addClass('disabled-edit');
           selectedType = $(this).text();
-          $('#left-drag, .left-bubble').css('left', $(this).attr('data-left')+'px').show();
-          $('#right-drag, .right-bubble').css('left', $(this).attr('data-right')+'px').show();
+          if(parseFloat($(this).attr('data-left')) !== 24) {
+              $('#left-drag, .left-bubble').css('left', (parseFloat($(this).attr('data-left')) + 2)+'px').show();
+          } else {
+              $('#left-drag, .left-bubble').css('left', $(this).attr('data-left')+'px').show();
+          }
+          $('#right-drag, .right-bubble').css('left', (parseFloat($(this).attr('data-right')) + 2)+'px').show();
           var distanceBetDrag = $('#right-drag').position().left - $('#left-drag').position().left;
           $('#draggable-area').css({'left': ($('#left-drag').position().left), 'width': distanceBetDrag});
           timeCalc();
@@ -270,8 +274,8 @@ gameBoard.createBoard(10, "#editable-chart");
       // MouseDown
       $('#left-drag, #right-drag').mousedown(onMouseDown);
       function timeCalc() {
-          var toDragPos = $('#right-drag').position().left;
-          var fromDragPos = $('#left-drag').position().left;
+          var toDragPos = parseFloat($('#right-drag').position().left) - 2;
+          var fromDragPos = parseFloat($('#left-drag').position().left) - 2;
           var distanceBetDrag = toDragPos - fromDragPos;
           var selectedToTime = $('[actualx="'+Math.ceil(toDragPos)+'"]').attr('key');
           var selectedFromTime = $('[actualx="'+Math.ceil(fromDragPos == 24 ? 27 : fromDragPos)+'"]').attr('key');

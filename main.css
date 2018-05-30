@@ -12,7 +12,7 @@ body {
     background-color: #f58220;
     position: absolute;
     z-index: 999;
-    opacity: 0.5;
+    opacity: 0.3;
     top: 39px;
 }
 #left-drag,
