@@ -149,8 +149,67 @@ $(document).ready(function(){
         jsonArr.push(jsonObj);
     }
 
+
+    var json = [
+        {
+        "driverState" : "OFF_DUTY",
+        "minutesFrom" : 0,
+        "minutesTo" : 300,
+        "location" : "",
+        "note" : "",
+        "entryId" : 0
+        },
+        {
+        "driverState" : "ON_DUTY",
+        "minutesFrom" : 300,
+        "minutesTo" : 765,
+        "location" : "Minsk",
+        "distance" : 0,
+        "note" : "",
+        "entryId" : 1
+        },
+        {
+        "driverState" : "OFF_DUTY",
+        "minutesFrom" : 765,
+        "minutesTo" : 810,
+        "entryId" : 2
+        },
+        {
+        "driverState" : "DRIVING",
+        "minutesFrom" : 810,
+        "minutesTo" : 1020,
+        "entryId" : 3
+        },
+        {
+        "driverState" : "ON_DUTY",
+        "minutesFrom" : 1020,
+        "minutesTo" : 1140,
+        "location" : "Minsk",
+        "note" : "",
+        "entryId" : 4
+        },
+        {
+        "driverState" : "OFF_DUTY",
+        "minutesFrom" : 1140,
+        "minutesTo" : 1440,
+        "location" : "Minsk",
+        "note" : "",
+        "entryId" : 5
+        }
+    ];
+    var jsnArr = [];
+    $.each(json, function(key, value){
+        for(var i = value.minutesFrom; i <= value.minutesTo; i++){
+            var obj = {};
+            obj["driverState"] = value.driverState;
+            obj["minutesFrom"] = value.minutesFrom;
+            obj["minutesTo"] = i;
+            jsnArr.push(obj);
+        }
+    });
+
     var previousState = '', previousFrom = '';
-    $.each(jsonArr, function(key, value){
+    $.each(jsnArr, function(key, value){
         var statusIndex = $.inArray(value.driverState, driverState);
         $('#editable-chart').append('<div class="point" style="left:'+($('.elm[key="'+(value.minutesTo)+'"]').attr('xToPlot'))+'px;top: '+driverStatusPoint[statusIndex]+'px"></div>');
         if(previousState.length == 0) {
@@ -210,7 +269,7 @@ gameBoard.createBoard(10, "#editable-chart");
           $('.drag-elem').draggable({
               axis: "x",
               delay: 0,
-              containment: "#editable-chart",
+              containment: [42,0,($( window ).width() - 42),0], //"#editable-chart",
               create: function(event, ui){},
               drag: function(event, ui){
                   timeCalc();
